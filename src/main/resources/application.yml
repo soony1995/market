@@ -1,22 +1,34 @@
 spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: root
   mvc:
     path match:
       matching-strategy: ant_path_matcher
+    # docker-compose를 이용해 컨테이너로 만들게 될 경우 해당 옵션은 docker-compose이 우선순위가
+    # 더 높기 때문에 datasource를 주석처리해도 문제가 되진 않는다.
   datasource:
-    url: jdbc:h2:mem:market
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://127.0.0.1:3306/MARKET
+    url: jdbc:mysql://localhost:3306/market?useSSL=false&allowPublicKeyRetrieval=true # for docker 옵션 주의 !
+    username: root
+    password: 1234
   jpa:
-    defer-datasource-initialization: true
-    database-platform: H2
+    # database-platform: org.hibernate.dialect.MySQLDialect
+    # 에러내용: heck the manual that corresponds to your MySQL server version for the right syntax to use near 'type=MyISAM'
+    # mysql8부터는 해당 옵션으로 바꿔서 넣어줘야함.
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
+    # ddl 생성 여부
+#    generate-ddl: true
     hibernate:
-      ddl-auto: update
+      # hibernate 초기화 전략
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+
