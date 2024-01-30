@@ -1,4 +1,11 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 466161410589-k3i67tcrlaop99p4al96fn4sr9lpdrdv.apps.googleusercontent.com
+            client-secret: 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
   redis:
     host: localhost
     port: 6379
@@ -22,10 +29,10 @@ spring:
 
 
     # ddl 생성 여부
-#    generate-ddl: true
+    #    generate-ddl: true
     hibernate:
       # hibernate 초기화 전략
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:

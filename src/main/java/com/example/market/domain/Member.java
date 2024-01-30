@@ -1,8 +1,8 @@
 package com.example.market.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import com.example.market.dto.MemberDto;
+import com.example.market.type.MemberRole;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import reactor.util.annotation.Nullable;
@@ -15,6 +15,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +33,9 @@ public class Member {
     @Nullable
     private String location;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
+
     private String status;
 
     // 일대일 관계에서는 호출이 많이 불리는 곳을 연관관계의 주인으로 둔다.
@@ -44,5 +50,11 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-
+    public static Member createMember(MemberDto dto) {
+        return Member.builder()
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .location(dto.getLocation())
+                .build();
+    }
 }
