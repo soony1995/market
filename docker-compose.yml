@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: market
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+
+#  app:
+#    build:
+#      context: build/libs
+##      dockerfile: Dockerfile
+##    image: mason937/market:v1.0
+#
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+#      - redis
+#    restart:
+#      always
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/market?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=1234
+
+  redis:
+    image: redis:alpine
+    command: redis-server --requirepass root
+    ports:
+      - "6379:6379"
+#    healthcheck:
+#      test: ["CMD","redis-cli","ping"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
+volumes:
+  mysql_data:
