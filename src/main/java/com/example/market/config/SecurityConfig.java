@@ -1,19 +1,77 @@
-//package com.example.market.config;
-//
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.Customizer;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.core.userdetails.User;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration
-//@EnableWebSecurity
-//public class SecurityConfig {
+package com.example.market.config;
+
+
+import com.example.market.service.MemberService;
+import com.example.market.service.MemberServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@RequiredArgsConstructor
+@Configuration // TODO: 빈의 싱글톤 패턴을 보장해주는 어노테이션이다.
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final MemberService memberService;
+
+    @Bean
+    UserAuthenticationFailureHandler getFailureHandler() {
+        return new UserAuthenticationFailureHandler();
+    }
+
+    @Bean
+    PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        /* 1. UserDetailsService을 상속받은 객체를 넘겨줘야 한다.
+           2. impl에서 새로 상속받은 인터페이스를 구현해줘야 한다.
+         */
+
+        auth.userDetailsService(memberService)
+                .passwordEncoder(getPasswordEncoder());
+
+        super.configure(auth);
+    }
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        // TODO: csrf?
+        http.csrf().disable();
+
+        http.authorizeRequests()
+                .antMatchers(
+                        "/",
+                        "/member/register",
+                        "/member/email-auth"
+                        , "/member/find/password")
+                .permitAll();
+
+        http.formLogin()
+                .loginPage("/member/login")
+                .failureHandler(getFailureHandler()) // TODO: 로그인이 실패했을 때의 핸들러
+                .permitAll();
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+
+
+        super.configure(http);
+    }
+}
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        return http
@@ -36,4 +94,3 @@
 //                        .build()
 //        );
 //    }
-//}

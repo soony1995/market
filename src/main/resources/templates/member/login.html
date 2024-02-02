@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 로그인</title>
+</head>
+<body>
+<h1> 회원 로그인</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+<div th:text="${errorMessage}">
+</div>
+
+<form method="post">
+    <div>
+        <!-- name을 username으로 안할 경우 username parameter is empty in loadUserByUsername(String username) - spring boot 에러가 발생함. -->
+        <input type="email" name="username" placeholder="이메일을 입력해주세요">
+    </div>
+    <div>
+        <!-- password username으로 안할 경우 username parameter is empty in loadUserByUsername(String username) - spring boot 에러가 발생함. -->
+        <input type="password" name="password" placeholder="비밀번호를 입력해주세요">
+    </div>
+    <div>
+        <button type="submit"> 로그인</button>
+    </div>
+</form>
+<div>
+    <a href="/member/find/password">비밀번호 찾기</a>
+</div>
+</body>
+</html>

@@ -32,10 +32,20 @@ spring:
     #    generate-ddl: true
     hibernate:
       # hibernate 초기화 전략
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
         show_sql: true
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dhtnscjf12@gmail.com
+    password: nzhtgwkvjoavhmjk
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable:
+              true
