@@ -1,17 +1,17 @@
 package com.example.market.domain;
 
-import com.example.market.dto.member.RegisterDto;
-import com.example.market.type.MemberRole;
 import com.example.market.type.MemberStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -36,8 +36,7 @@ public class Member {
     @Nullable
     private String location;
 
-    @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    private String roles;
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
@@ -58,25 +57,42 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Member createMember(RegisterDto dto, Cart cart) {
-        Member member = Member.builder()
-                .email(dto.getEmail())
-                .password(dto.getPassword())
-                .location(dto.getLocation())
-                .status(MemberStatus.ACTIVE)
-                .memberRole(MemberRole.USER)
-                .emailAuth(false)
-                .emailAuthKey(UUID.randomUUID().toString())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .cart(cart)
-                .build();
-        return member;
-    }
+
+    // TODO: spring security를 이용하기 위해 사용되는 메서드들
 
     // 이메일 인증을 처리하는 메서드
-        public void authenticateEmail() {
-            this.emailAuth = true;
-            this.emailAuthAt = LocalDateTime.now();
-        }
+    public void authenticateEmail() {
+        this.emailAuth = true;
+        this.emailAuthAt = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

@@ -1,22 +1,24 @@
 package com.example.market.service;
 
-import com.example.market.dto.member.RegisterDto;
-import com.example.market.dto.member.ResetPasswordDto;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.example.market.dto.member.MemberLogin;
+import com.example.market.dto.member.MemberRegister;
 
-public interface MemberService extends UserDetailsService {
-    boolean register(RegisterDto dto);
+public interface MemberService {
+    String register(MemberRegister.Request request);
 
-    /**
-        계정인증
-     */
-    boolean validateEmailConfirmation(String emailAuthKey);
+    void login(MemberLogin.Request request);
 
+    void authCheck(String authKey);
 
     /**
-     * 비밀번호 초기화
+     계정인증
      */
-    boolean sendPasswordResetLink(ResetPasswordDto request);
-
-    boolean validatePasswordResetLink(String id);
+//    boolean validateEmailConfirmation(String emailAuthKey);
+//
+//    /**
+//     * 비밀번호 초기화
+//     */
+//    boolean sendPasswordResetLink(ResetPasswordDto request);
+//
+//    boolean validatePasswordResetLink(String id);
 }

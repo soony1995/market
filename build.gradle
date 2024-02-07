@@ -26,11 +26,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // JDBC 사용
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // TODO: security를 사용하게 되면 모든 페이지에 대해서 로그인을 해야 한다.
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6' // 쿼리의 파라미터를 볼 수 있다.
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     runtimeOnly 'com.mysql:mysql-connector-j'
