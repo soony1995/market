@@ -34,7 +34,7 @@ spring:
     #    generate-ddl: true
     hibernate:
       # hibernate 초기화 전략
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:

@@ -1,12 +1,13 @@
 package com.example.market.service;
 
+import com.example.market.dto.TokenDto;
 import com.example.market.dto.member.MemberLogin;
 import com.example.market.dto.member.MemberRegister;
 
 public interface MemberService {
     String register(MemberRegister.Request request);
 
-    void login(MemberLogin.Request request);
+    TokenDto authorize(MemberLogin.Request request);
 
     void authCheck(String authKey);
 

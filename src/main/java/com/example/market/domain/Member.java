@@ -58,14 +58,13 @@ public class Member implements UserDetails {
     private LocalDateTime updatedAt;
 
 
-    // TODO: spring security를 이용하기 위해 사용되는 메서드들
-
     // 이메일 인증을 처리하는 메서드
-    public void authenticateEmail() {
+    public void markEmailAsVerified() {
         this.emailAuth = true;
         this.emailAuthAt = LocalDateTime.now();
     }
 
+    // TODO: spring security를 이용하기 위해 사용되는 메서드들
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
