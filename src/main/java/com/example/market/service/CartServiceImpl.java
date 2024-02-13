@@ -60,6 +60,13 @@ public class CartServiceImpl implements CartService {
                 })
                 .collect(Collectors.toList());
 
+        nullPointException
+
+                try {}
+        catch (NullPointerException e) {
+                    new ItemException("메세지!", e)
+        }
+
         // list를 저장할 때에는 saveAll을 쓰자.
         // ASK: 에러처리는 어떻게?
         cartItemRepository.saveAll(cartItems);

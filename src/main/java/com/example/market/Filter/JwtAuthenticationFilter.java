@@ -20,6 +20,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+
+    // 클라 -> cart 등록 리퀘스트 (with token) -> JwtAutheticationFilter를 타고 -> dofilter -> 토큰검사 -> SecurityContextHolder넣어줌 -> 카트 controller
+    // ->
     // 토큰 검사
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

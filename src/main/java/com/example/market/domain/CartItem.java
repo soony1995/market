@@ -22,7 +22,7 @@ public class CartItem {
     @Column(name = "cart_item_id")
     private long id;
 
-    // ManyToOne의 fetch tpye의 기본값이 eager이다
+    // ManyToOne의 fetch type의 기본값이 eager이다
     // cascade = CascadeType.ALL는 부모
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
