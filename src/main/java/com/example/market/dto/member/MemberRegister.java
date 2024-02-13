@@ -29,9 +29,9 @@ public class MemberRegister {
         @Nullable
         private String location;
 
-        public String encryptPassword() {
-            return BCrypt.hashpw(this.password, BCrypt.gensalt());
-        }
+//        public String encryptPassword() {
+//            return BCrypt.hashpw(this.password, BCrypt.gensalt());
+//        }
 
         public Member toEntity() {
 
@@ -41,7 +41,7 @@ public class MemberRegister {
 
             return Member.builder()
                     .email(this.getEmail())
-                    .password(encryptPassword())
+                    .password(this.getPassword())
                     .location(this.getLocation())
                     .status(MemberStatus.ACTIVE)
                     .roles(MemberRole.USER.toString())

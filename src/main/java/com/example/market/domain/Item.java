@@ -2,6 +2,7 @@ package com.example.market.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Item {
     @Id
@@ -23,6 +25,8 @@ public class Item {
     private int price;
     private int stock;
     private String description;
+    //ASK
+    private String memberName;
 
     @CreatedDate
     private LocalDateTime createdAt;

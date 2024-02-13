@@ -1,14 +1,20 @@
 package com.example.market.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CartItem {
 
     @Id
@@ -34,4 +40,9 @@ public class CartItem {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void increaseCount(int count,int price) {
+        this.cartCount += count;
+        this.cartPrice += price;
+    }
 }

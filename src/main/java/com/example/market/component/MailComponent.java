@@ -1,6 +1,7 @@
 package com.example.market.component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 public class MailComponent {
 
     private final JavaMailSender javaMailSender;
+
     public void sendMail(String to, String subject, String body) {
 
         MimeMessage message = javaMailSender.createMimeMessage();
