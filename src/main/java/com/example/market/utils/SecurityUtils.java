@@ -1,4 +1,4 @@
-package com.example.market.util;
+package com.example.market.utils;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;

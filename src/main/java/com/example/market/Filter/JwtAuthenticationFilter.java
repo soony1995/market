@@ -1,6 +1,6 @@
 package com.example.market.Filter;
 
-import com.example.market.component.JwtTokenProvider;
+import com.example.market.security.component.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

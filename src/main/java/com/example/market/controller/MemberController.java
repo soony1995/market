@@ -3,8 +3,8 @@ package com.example.market.controller;
 import com.example.market.dto.TokenDto;
 import com.example.market.dto.member.MemberLogin;
 import com.example.market.dto.member.MemberRegister;
-import com.example.market.service.MemberServiceImpl;
-import com.example.market.util.ResponseEntityBuilder;
+import com.example.market.service.MemberService;
+import com.example.market.utils.ResponseEntityBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
 
     @PostMapping("/api/authorization")
     public ResponseEntity<Object> authorize(@RequestBody MemberLogin.Request request, HttpServletResponse response) {

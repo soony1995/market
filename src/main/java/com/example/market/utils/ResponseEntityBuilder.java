@@ -1,6 +1,5 @@
-package com.example.market.util;
+package com.example.market.utils;
 
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

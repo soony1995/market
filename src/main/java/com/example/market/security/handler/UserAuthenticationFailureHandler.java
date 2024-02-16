@@ -1,4 +1,4 @@
-package com.example.market.config;
+package com.example.market.security.handler;
 
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;

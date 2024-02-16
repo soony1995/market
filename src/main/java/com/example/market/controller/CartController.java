@@ -2,7 +2,7 @@ package com.example.market.controller;
 
 import com.example.market.dto.cart.CartAddItems;
 import com.example.market.service.CartService;
-import com.example.market.util.ResponseEntityBuilder;
+import com.example.market.utils.ResponseEntityBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

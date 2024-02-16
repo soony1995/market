@@ -1,4 +1,4 @@
-package com.example.market.component;
+package com.example.market.security.component;
 
 import com.example.market.dto.TokenDto;
 import io.jsonwebtoken.*;

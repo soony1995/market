@@ -1,7 +1,7 @@
-package com.example.market.config;
+package com.example.market.security.config;
 
 import com.example.market.Filter.JwtAuthenticationFilter;
-import com.example.market.component.JwtTokenProvider;
+import com.example.market.security.component.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

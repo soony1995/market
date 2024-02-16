@@ -20,7 +20,7 @@ import java.util.Collection;
 @Builder
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Member implements UserDetails {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -62,36 +62,5 @@ public class Member implements UserDetails {
     public void markEmailAsVerified() {
         this.emailAuth = true;
         this.emailAuthAt = LocalDateTime.now();
-    }
-
-    // TODO: spring security를 이용하기 위해 사용되는 메서드들
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 }
