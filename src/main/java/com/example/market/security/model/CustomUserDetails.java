@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.example.market.type.Constant.SEP;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -32,7 +34,7 @@ public class CustomUserDetails implements UserDetails {
         this.username = member.getEmail();
         this.password = member.getPassword();
         this.authorities =
-                Arrays.stream(member.getRoles().split(","))
+                Arrays.stream(member.getRoles().split(SEP))
                         .map(role -> new SimpleGrantedAuthority(username))
                         .collect(Collectors.toList());
     }

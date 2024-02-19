@@ -16,6 +16,8 @@ public enum ErrCode {
     INVALID_AUTH_KEY(HttpStatus.FORBIDDEN, "잘못된 인증입니다."),
     DATA_ACCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 베이스에 문제가 생겼습니다."),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "찾는 아이템이 존재하지 않습니다."),
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니가 존재하지 않습니다."),
+    ITEM_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 등록된 상품입니다."),
     STOCK_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "재고가 부족합니다.");
 
 

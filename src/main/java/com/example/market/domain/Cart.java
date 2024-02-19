@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Cart {
+public class Cart extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
@@ -26,7 +26,4 @@ public class Cart {
     // 이유:즉, 부모 엔티티를 로드할 때 연관된 자식 엔티티들도 함께 즉시 로드됩니다
 //    @OneToOne(mappedBy = "cart",fetch = FetchType.LAZY)
 //    private Member member;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

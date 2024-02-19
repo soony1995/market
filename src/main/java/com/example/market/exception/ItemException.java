@@ -1,19 +1,12 @@
 package com.example.market.exception;
 
+import com.example.market.exception.CustomException;
 import com.example.market.type.ErrCode;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
-
 
 @Getter
-public class ItemException extends RuntimeException {
-    private final ErrCode errorCode;
-    private final String errorMessage;
-    private final HttpStatus statusCode;
-
+public class ItemException extends CustomException {
     public ItemException(ErrCode errorCode) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getDescription();
-        this.statusCode = errorCode.getHttpStatus();
+        super(errorCode);
     }
 }

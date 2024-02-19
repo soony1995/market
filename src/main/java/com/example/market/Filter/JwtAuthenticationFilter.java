@@ -36,15 +36,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 토큰이 없거나 유효성 검사에서 실패한 경우 다음 filter로 진행되게 함.
         chain.doFilter(request, response);
     }
-
-    // authorization을 이용한 토큰 추출
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
+//
+//    // authorization을 이용한 토큰 추출
+//    private String resolveToken(HttpServletRequest request) {
+//        String bearerToken = request.getHeader("Authorization");
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+//            return bearerToken.substring(7);
+//        }
+//        return null;
+//    }
 
     // cookie를 이용한 토큰 추출
     private String resolveTokenByCookie(HttpServletRequest request) {
