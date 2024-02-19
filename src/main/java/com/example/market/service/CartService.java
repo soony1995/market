@@ -15,6 +15,7 @@ import com.example.market.repository.ItemRepository;
 import com.example.market.repository.MemberRepository;
 import com.example.market.type.ErrCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +35,18 @@ public class CartService {
     private final ItemRepository itemRepository;
 
     @Transactional
-    public void addItemsToCart(List<CartAddItems.Request> requests) {
+    public String addItemsToCart(List<CartAddItems.Request> requests) {
         Cart cart = findMemberByRepository().getCart();
 
         List<CartItem> cartItems = handleAddItemsToCart(requests, cart);
 
-        cartItemRepository.saveAll(cartItems);
+        List<CartItem> savedCartItems = cartItemRepository.saveAll(cartItems);
+
+        if (savedCartItems.size() != 0) {
+            return "성공";
+        } else {
+            return "실패";
+        }
     }
 
     @Transactional(readOnly = true)
@@ -52,8 +59,9 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteItemsFromCart() {
+    public boolean deleteItemsFromCart() {
         Member member = findMemberByRepository();
+        return true;
     }
 
     private Member findMemberByRepository() {

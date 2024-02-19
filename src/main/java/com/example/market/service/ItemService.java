@@ -3,7 +3,9 @@ package com.example.market.service;
 import com.example.market.domain.Item;
 import com.example.market.dto.item.ItemInfo;
 import com.example.market.dto.item.ItemRegister;
+import com.example.market.exception.CustomException;
 import com.example.market.exception.ItemException;
+import com.example.market.exception.MemberException;
 import com.example.market.repository.ItemRepository;
 import com.example.market.type.ErrCode;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,12 @@ public class ItemService {
                 .ifPresent(item -> {
                     throw new ItemException(ErrCode.ITEM_ALREADY_EXIST);
                 });
+
+        // TODO: error가 터지면 jpa에서 뭔가 자기들이 만든 에러를 던져요. (unchecked exception)
+        // TODO:  잡으면 됩니다.
+        // TODO: 1. 그냥 쓰고 로그로 확인해주는거 (일반적)
+        // TODO: 2. try catch 잡아서 커스텀 로그로 던져준다.
+        // TODO: 3. jpa에서 발생하는 에러 타입으로 handler에서 잡아줌
 
         itemRepository.save(request.toEntity());
     }

@@ -15,6 +15,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
+    // TODO: restful 적인거 vs 가독성 적인거
     @GetMapping("/api/items/{id}")
     public ResponseEntity<Object> itemInfo(@PathVariable long id) {
         ItemInfo.Response response = itemService.itemInfo(id);

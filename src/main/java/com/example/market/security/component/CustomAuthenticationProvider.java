@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+// 필터 -> 디스패처 -> controller 로그인처리를 진행
+// 필터 (로그인 처리를 완료) 리턴.
 @RequiredArgsConstructor
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -19,6 +21,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    // /api/authorize
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 

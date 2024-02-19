@@ -4,6 +4,7 @@ import com.example.market.dto.ErrorResponse;
 import com.example.market.exception.CustomException; // 가정: 모든 커스텀 예외의 공통 인터페이스
 import com.example.market.type.ErrCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(e);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class, OptimisticLockingFailureException.class})
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error(e.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(ErrCode.INTERNAL_SERVER_ERROR);

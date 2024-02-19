@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,20 +18,18 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/api/carts")
-    public ResponseEntity<Object> getItemsFromCart() {
-        List<CartQueryItems.Response> response = cartService.getItemsFromCart();
-        return ResponseEntityBuilder.buildOkResponse(response);
+    @GetMapping("/api/{version}/carts")
+    public ResponseEntity<List<CartQueryItems.Response>> getItemsFromCart(@PathVariable String version) {
+        return ResponseEntityBuilder.buildOkResponse(cartService.getItemsFromCart());
     }
 
     @PostMapping("/api/carts")
-    public ResponseEntity<Object> addItemsToCart(@RequestBody @Validated List<CartAddItems.Request> request) {
-        cartService.addItemsToCart(request);
-        return ResponseEntityBuilder.buildOkResponse("성공!");
+    public ResponseEntity<String> addItemsToCart(@RequestBody @Validated List<CartAddItems.Request> request) {
+        return ResponseEntityBuilder.buildOkResponse(cartService.addItemsToCart(request));
     }
 
     @DeleteMapping("/api/carts/")
-    public ResponseEntity<Object> deleteItemsFromCart() {
+    public ResponseEntity<Boolean> deleteItemsFromCart() {
         cartService.deleteItemsFromCart();
         return ResponseEntityBuilder.buildOkResponse("성공!");
     }
