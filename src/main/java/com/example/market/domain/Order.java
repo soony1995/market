@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor
-public class Order {
+public class Order extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -24,14 +24,10 @@ public class Order {
     // foreign key가 있는 곳을 주인으로 설정한다.
     // member 테이블을 변경할 경우 order 테이블이 변할 수 있다.
     // 값의 변경은 이 클래스를 통해서만 변경한다.
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
-
-    @LastModifiedDate
-    private LocalDateTime orderedAt;
-
 }

@@ -37,8 +37,6 @@ public class MemberRegister {
                     .roles(MemberRole.USER.toString())
                     .emailAuth(false)
                     .emailAuthKey(UUID.randomUUID().toString())
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
                     .cart(cart)
                     .build();
         }

@@ -1,6 +1,6 @@
 package com.example.market.controller;
 
-import com.example.market.dto.TokenDto;
+import com.example.market.security.dto.TokenDto;
 import com.example.market.dto.member.MemberLogin;
 import com.example.market.dto.member.MemberRegister;
 import com.example.market.service.MemberService;
@@ -23,20 +23,9 @@ public class MemberController {
     @PostMapping("/api/authorization")
     public ResponseEntity<Object> authorize(@RequestBody MemberLogin.Request request, HttpServletResponse response) {
         TokenDto tokens = memberService.authorize(request);
-        Cookie accessToken = new Cookie("accessToken", tokens.getAccessToken());
-        // 쿠키 설정 (예: 24시간 후 만료)
-        accessToken.setMaxAge(24 * 60 * 60);
-        accessToken.setHttpOnly(true); // JavaScript를 통한 접근 방지
-        accessToken.setPath("/"); // 쿠키가 전송될 수 있는 경로
 
-        Cookie refreshToken = new Cookie("refreshToken", tokens.getAccessToken());
-        // 쿠키 설정 (예: 24시간 후 만료)
-        refreshToken.setMaxAge(24 * 60 * 60);
-        refreshToken.setHttpOnly(true); // JavaScript를 통한 접근 방지
-        refreshToken.setPath("/"); // 쿠키가 전송될 수 있는 경로
-
-        response.addCookie(accessToken);
-        response.addCookie(refreshToken);
+        addCookieToResponse(response, "accessToken", tokens.getAccessToken(), tokens.getExpiredTime());
+        addCookieToResponse(response, "refreshToken", tokens.getRefreshToken(), tokens.getExpiredTime());
 
         return ResponseEntityBuilder.buildOkResponse();
     }
@@ -51,5 +40,13 @@ public class MemberController {
     public ResponseEntity<Object> authCheck(@PathVariable String key) {
         memberService.authCheck(key);
         return ResponseEntityBuilder.buildOkResponse();
+    }
+
+    private void addCookieToResponse(HttpServletResponse response, String name, String value, int maxAgeInSeconds) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

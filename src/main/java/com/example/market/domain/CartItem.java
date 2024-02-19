@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItem {
+public class CartItem extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +32,11 @@ public class CartItem {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    private int cartPrice;
-    private int cartCount;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private int price;
+    private int count;
 
     public void increaseCount(int count,int price) {
-        this.cartCount += count;
-        this.cartPrice += price;
+        this.count += count;
+        this.price += price;
     }
 }

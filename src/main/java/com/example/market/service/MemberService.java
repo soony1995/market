@@ -1,10 +1,10 @@
 package com.example.market.service;
 
 
+import com.example.market.security.dto.TokenDto;
 import com.example.market.security.component.JwtTokenProvider;
 import com.example.market.component.MailComponent;
 import com.example.market.domain.Member;
-import com.example.market.dto.TokenDto;
 import com.example.market.dto.member.MemberLogin;
 import com.example.market.dto.member.MemberRegister;
 import com.example.market.exception.MemberException;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MemberService  {
+public class MemberService {
     private final MemberRepository memberRepository;
     private final MailComponent mailComponent;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -34,6 +34,7 @@ public class MemberService  {
 
     @Transactional
     public TokenDto authorize(MemberLogin.Request request) {
+
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         // 이메일 auth check가 되어 있지 않다면 거부
@@ -58,7 +59,7 @@ public class MemberService  {
 
         // 이메일 발송 로직
         // 이메일 재발송 로직에 대한 처리도 필요함.
-        return emailAuthorize(member.getEmail(), member.getEmailAuthKey(), MailFormat.SIGNUP_CONFIRMATION);
+        return emailAuthorize(member.getEmail(), member.getEmailAuthKey());
     }
 
     @Transactional
@@ -77,10 +78,11 @@ public class MemberService  {
         log.info("이메일 인증이 완료되었습니다.");
     }
 
-    private String emailAuthorize(String userEmail, String
-            authKey, MailFormat mailFormat) {
-        String subject = mailFormat.getSubject();
-        String text = mailFormat.getTextTemplate(authKey);
+    private String emailAuthorize(String userEmail, String authKey) {
+
+        String subject = MailFormat.SIGNUP_CONFIRMATION.getSubject();
+        String text = MailFormat.SIGNUP_CONFIRMATION.getTextTemplate(authKey);
+
         mailComponent.sendMail(userEmail, subject, text);
         return authKey;
     }

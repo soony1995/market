@@ -1,7 +1,8 @@
-package com.example.market.security.provider;
+package com.example.market.security.component;
 
 import com.example.market.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
