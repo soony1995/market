@@ -18,7 +18,9 @@ public enum ErrCode {
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "찾는 아이템이 존재하지 않습니다."),
     CART_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니가 존재하지 않습니다."),
     ITEM_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 등록된 상품입니다."),
+    ITEM_NOT_DELETED(HttpStatus.BAD_REQUEST,"상품 삭제에 실패했습니다."),
     STOCK_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "재고가 부족합니다.");
+
 
 
     private final HttpStatus httpStatus;

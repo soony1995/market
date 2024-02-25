@@ -22,7 +22,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # url: jdbc:mysql://127.0.0.1:3306/MARKET
-    url: jdbc:mysql://localhost:3306/market?useSSL=false&allowPublicKeyRetrieval=true # for docker 옵션 주의 !
+    url: jdbc:mysql://localhost:33306/market?useSSL=false&allowPublicKeyRetrieval=true # for docker 옵션 주의 !
     username: root
     password: 1234
   jpa:

@@ -16,8 +16,6 @@ public class CartAddItems {
     public static class Request {
         private long itemId;
         private int count;
-        @Nullable
-        private int price;
 
         public CartItem toEntity(Cart cart, Item item) {
             return CartItem.builder()

@@ -41,8 +41,8 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/{version}/members", "/api/members/{version}/auth-check/{id}", "/api/{version}/authorization").permitAll()
-                .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
+                .antMatchers("/api/{version}/members/auth-check/{id}","/api/{version}/members").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(customJsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

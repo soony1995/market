@@ -1,6 +1,8 @@
 package com.example.market.security.Filter;
 
 import com.example.market.security.component.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +56,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 // 특정 이름의 쿠키를 찾음
-                if ("accessToken" .equals(cookie.getName())) {
+                if ("accessToken".equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }

@@ -22,7 +22,7 @@ public class ItemService {
     @Transactional
     public void itemRegister(ItemRegister.Request request) {
         // 오픈 마켓의 형태가 아니기 때문에, 동일한 상품의 이름은 허용하지 않음.
-        itemRepository.findByName(request.getItemName())
+        itemRepository.findByName(request.getName())
                 .ifPresent(item -> {
                     throw new ItemException(ErrCode.ITEM_ALREADY_EXIST);
                 });

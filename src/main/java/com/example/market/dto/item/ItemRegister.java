@@ -13,13 +13,13 @@ public class ItemRegister {
     @Getter
     public static class Request {
         private int price;
-        private String itemName;
+        private String name;
         private int stock;
         private String description;
 
         public Item toEntity() {
             return Item.builder()
-                    .name(this.itemName)
+                    .name(this.name)
                     .price(this.price)
                     .stock(this.stock)
                     .description(this.description)

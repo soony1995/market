@@ -27,6 +27,4 @@ public class MemberController {
         memberService.authCheck(key);
         return ResponseBuilder.buildOkResponse();
     }
-
-
 }
