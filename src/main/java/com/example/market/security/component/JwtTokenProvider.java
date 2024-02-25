@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -84,6 +86,14 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), EMPTY_STRING, authorities);
         return new UsernamePasswordAuthenticationToken(principal, EMPTY_STRING, authorities);
+    }
+
+    public void addCookieToResponse(HttpServletResponse response, String name, String value, int maxAgeInSeconds) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     // 토큰 정보를 검증하는 메서드

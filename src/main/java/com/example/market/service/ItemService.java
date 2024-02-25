@@ -26,7 +26,6 @@ public class ItemService {
                 .ifPresent(item -> {
                     throw new ItemException(ErrCode.ITEM_ALREADY_EXIST);
                 });
-
         itemRepository.save(request.toEntity());
     }
 

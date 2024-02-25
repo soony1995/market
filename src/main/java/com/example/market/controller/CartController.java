@@ -2,9 +2,8 @@ package com.example.market.controller;
 
 import com.example.market.dto.cart.CartAddItems;
 import com.example.market.dto.cart.CartQueryItems;
-import com.example.market.dto.item.ItemInfo;
 import com.example.market.service.CartService;
-import com.example.market.utils.ResponseEntityBuilder;
+import com.example.market.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,24 +13,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/{version}")
 public class CartController {
     private final CartService cartService;
 
-    @GetMapping("/api/carts")
-    public ResponseEntity<Object> getItemsFromCart() {
+    @GetMapping("/carts")
+    public ResponseEntity<Object> getItemsFromCart(@PathVariable String version) {
         List<CartQueryItems.Response> response = cartService.getItemsFromCart();
-        return ResponseEntityBuilder.buildOkResponse(response);
+        return ResponseBuilder.buildOkResponse(response);
     }
 
-    @PostMapping("/api/carts")
-    public ResponseEntity<Object> addItemsToCart(@RequestBody @Validated List<CartAddItems.Request> request) {
+    @PostMapping("/carts")
+    public ResponseEntity<Object> addItemsToCart(@RequestBody @Validated List<CartAddItems.Request> request, @PathVariable String version) {
         cartService.addItemsToCart(request);
-        return ResponseEntityBuilder.buildOkResponse("성공!");
+        return ResponseBuilder.buildOkResponse("성공!");
     }
 
-    @DeleteMapping("/api/carts/")
-    public ResponseEntity<Object> deleteItemsFromCart() {
+    @DeleteMapping("/carts/")
+    public ResponseEntity<Object> deleteItemsFromCart(@PathVariable String version) {
         cartService.deleteItemsFromCart();
-        return ResponseEntityBuilder.buildOkResponse("성공!");
+        return ResponseBuilder.buildOkResponse("성공!");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.market.Filter;
+package com.example.market.security.Filter;
 
 import com.example.market.security.component.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
