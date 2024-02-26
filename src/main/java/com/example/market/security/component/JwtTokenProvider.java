@@ -30,7 +30,6 @@ import static com.example.market.type.Constant.*;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    private LocalDateTime now;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

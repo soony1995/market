@@ -8,11 +8,10 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.util.annotation.Nullable;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 
-public class MemberRegister {
+public class MemberRegisterDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor

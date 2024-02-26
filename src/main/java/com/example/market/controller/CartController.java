@@ -1,9 +1,9 @@
 package com.example.market.controller;
 
-import com.example.market.domain.Cart;
-import com.example.market.dto.cart.CartAddItems;
-import com.example.market.dto.cart.CartPatchItems;
-import com.example.market.dto.cart.CartQueryItems;
+import com.example.market.dto.cart.CartAddItemsDto;
+import com.example.market.dto.cart.CartDeleteItemsDto;
+import com.example.market.dto.cart.CartPatchItemsDto;
+import com.example.market.dto.cart.CartQueryItemsDto;
 import com.example.market.service.CartService;
 import com.example.market.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
@@ -19,23 +19,23 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/carts")
-    public ResponseEntity<List<CartQueryItems.Response>> getCartItems(@PathVariable String version) {
-        List<CartQueryItems.Response> response = cartService.getCartItems();
+    public ResponseEntity<List<CartQueryItemsDto.Response>> cartList(@PathVariable String version) {
+        List<CartQueryItemsDto.Response> response = cartService.findCartItems();
         return ResponseBuilder.buildOkResponse(response);
     }
 
     @PostMapping("/carts")
-    public ResponseEntity<String> addCartItems(@RequestBody List<CartAddItems.Request> request, @PathVariable String version) {
+    public ResponseEntity<String> cartAddItems(@RequestBody List<CartAddItemsDto.Request> request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(cartService.addCartItems(request));
     }
 
     @PatchMapping("/carts")
-    public ResponseEntity<String> patchCartItems(@RequestBody List<CartPatchItems.Request> request) {
-        return ResponseBuilder.buildOkResponse(cartService.patchCartItems(request));
+    public ResponseEntity<String> cartModify(@RequestBody List<CartPatchItemsDto.Request> request, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(cartService.modifyCartItems(request));
     }
 
     @PostMapping("/carts/items/delete")
-    public ResponseEntity<String> deleteCartItems(@RequestBody List<Long> ids, @PathVariable String version) {
-        return ResponseBuilder.buildOkResponse(cartService.deleteCartItems(ids));
+    public ResponseEntity<String> cartRemove(@RequestBody CartDeleteItemsDto.Request request, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(cartService.removeCartItems(request));
     }
 }

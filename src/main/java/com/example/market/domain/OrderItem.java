@@ -1,5 +1,7 @@
 package com.example.market.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +10,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class OrderItem extends BaseTimeEntity{
+@AllArgsConstructor
+@Builder
+public class OrderItem extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +30,5 @@ public class OrderItem extends BaseTimeEntity{
     private int orderPrice;
     private int count;
 
+    private String location;
 }

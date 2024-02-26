@@ -1,17 +1,15 @@
-package com.example.market.dto.cart;
+package com.example.market.dto.order;
 
+import com.example.market.type.OrderStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class CartPatchItems {
+public class OrderModifyStatus {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     public static class Request {
-        private long itemId;
-        private int count;
+        OrderStatus orderStatus;
     }
 }

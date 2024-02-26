@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.awt.print.PrinterAbortException;
-
-public class ItemInfo {
+public class ItemInfoDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
@@ -27,7 +25,7 @@ public class ItemInfo {
         private int stock;
         private String description;
 
-        public static ItemInfo.Response fromEntity(Item item) {
+        public static ItemInfoDto.Response fromEntity(Item item) {
             return Response.builder()
                     .price(item.getPrice())
                     .itemName(item.getName())

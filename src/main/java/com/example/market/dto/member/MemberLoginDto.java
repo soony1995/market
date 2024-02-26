@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-public class MemberLogin {
+public class MemberLoginDto {
 
     @Getter
     @NoArgsConstructor // 역 직렬화를 위해 기본생성자를 생성해야 한다. jackson에서 요구함.

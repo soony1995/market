@@ -2,7 +2,6 @@ package com.example.market.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 @Builder

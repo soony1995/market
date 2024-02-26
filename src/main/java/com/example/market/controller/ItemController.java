@@ -1,7 +1,7 @@
 package com.example.market.controller;
 
-import com.example.market.dto.item.ItemInfo;
-import com.example.market.dto.item.ItemRegister;
+import com.example.market.dto.item.ItemInfoDto;
+import com.example.market.dto.item.ItemRegisterDto;
 import com.example.market.service.ItemService;
 import com.example.market.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +17,19 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/items/{id}")
-    public ResponseEntity<Object> itemInfo(@PathVariable long id, @PathVariable String version) {
-        ItemInfo.Response response = itemService.itemInfo(id);
+    public ResponseEntity<Object> itemDetails(@PathVariable long id, @PathVariable String version) {
+        ItemInfoDto.Response response = itemService.findItem(id);
         return ResponseBuilder.buildOkResponse(response);
     }
 
     @GetMapping("/items")
-    public ResponseEntity<Object> getAllItems(@PathVariable String version) {
-        List<ItemInfo.Response> response = itemService.getAllItems();
+    public ResponseEntity<Object> itemList(@PathVariable String version) {
+        List<ItemInfoDto.Response> response = itemService.findAllItems();
         return ResponseBuilder.buildOkResponse(response);
     }
 
     @PostMapping("/items")
-    public ResponseEntity<Object> itemRegister(@RequestBody ItemRegister.Request request, @PathVariable String version) {
-        itemService.itemRegister(request);
-        return ResponseBuilder.buildOkResponse();
+    public ResponseEntity<String> itemAdd(@RequestBody ItemRegisterDto.Request request, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(itemService.addItem(request));
     }
 }

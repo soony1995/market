@@ -1,6 +1,6 @@
 package com.example.market.controller;
 
-import com.example.market.dto.member.MemberRegister;
+import com.example.market.dto.member.MemberRegisterDto;
 import com.example.market.service.MemberService;
 import com.example.market.utils.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +17,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/members")
-    public ResponseEntity<Object> register(@RequestBody MemberRegister.Request request, @PathVariable String version) {
-        String authKey = memberService.register(request);
-        return ResponseBuilder.buildOkResponse(authKey);
+    public ResponseEntity<String> memberAdd(@RequestBody MemberRegisterDto.Request request, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(memberService.addMember(request));
     }
 
     @GetMapping("/members/auth-check/{key}")
-    public ResponseEntity<Object> authCheck(@PathVariable String key, @PathVariable String version) {
-        memberService.authCheck(key);
-        return ResponseBuilder.buildOkResponse();
+    public ResponseEntity<String> MemberEmailCheck(@PathVariable String key, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(memberService.checkMemberEmail(key));
     }
 }

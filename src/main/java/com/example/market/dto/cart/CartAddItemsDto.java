@@ -4,11 +4,8 @@ import com.example.market.domain.Cart;
 import com.example.market.domain.CartItem;
 import com.example.market.domain.Item;
 import lombok.*;
-import reactor.util.annotation.Nullable;
 
-import java.time.LocalDateTime;
-
-public class CartAddItems {
+public class CartAddItemsDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor

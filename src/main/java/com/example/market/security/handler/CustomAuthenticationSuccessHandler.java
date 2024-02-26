@@ -17,13 +17,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final JwtTokenProvider jwtService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {TokenDto tokens = jwtService.generateToken(authentication);
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        TokenDto tokens = jwtService.generateToken(authentication);
         jwtService.addCookieToResponse(response, "accessToken", tokens.getAccessToken(), tokens.getExpiredTime());
         jwtService.addCookieToResponse(response, "refreshToken", tokens.getRefreshToken(), tokens.getExpiredTime());
-    }
-
-    private String extractUsername(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userDetails.getUsername();
     }
 }

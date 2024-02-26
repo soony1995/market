@@ -1,6 +1,8 @@
 package com.example.market.domain;
 
 import com.example.market.type.OrderStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +16,8 @@ import java.util.List;
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +34,8 @@ public class Order extends BaseTimeEntity {
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
+
+    public void modifyOrderStatus(OrderStatus orderStatus) {
+        this.status = orderStatus;
+    }
 }

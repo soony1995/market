@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/{version}/members/auth-check/{id}","/api/{version}/members").permitAll()
+                .antMatchers("/api/{version}/members/auth-check/{id}", "/api/{version}/members").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(customJsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -64,19 +64,6 @@ public class SecurityConfig {
         provider.setUserDetailsService(customUserDetailsService);
         return new ProviderManager(provider);
     }
-//
-//    @Bean
-//    public CustomAuthenticationSuccessHandler loginSuccessHandler() {
-//        return new CustomAuthenticationSuccessHandler();
-//    }
-//
-//    /**
-//     * 로그인 실패 시 호출되는 LoginFailureHandler 빈 등록
-//     */
-//    @Bean
-//    public CustomAuthenticationFailureHandler loginFailureHandler() {
-//        return new CustomAuthenticationFailureHandler();
-//    }
 
     @Bean
     public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {

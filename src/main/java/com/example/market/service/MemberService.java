@@ -1,25 +1,18 @@
 package com.example.market.service;
 
-
-import com.example.market.security.dto.TokenDto;
-import com.example.market.security.component.JwtTokenProvider;
 import com.example.market.component.MailComponent;
 import com.example.market.domain.Member;
-import com.example.market.dto.member.MemberLogin;
-import com.example.market.dto.member.MemberRegister;
+import com.example.market.dto.member.MemberRegisterDto;
 import com.example.market.exception.MemberException;
 import com.example.market.repository.MemberRepository;
 import com.example.market.type.ErrCode;
 import com.example.market.type.MailFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -31,21 +24,21 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String register(MemberRegister.Request request) {
-        // 이미 가입된 회원인지 체크하는 로직
+    public String addMember(MemberRegisterDto.Request request) {
+
+        // 이미 가입된 회원인지 체크
         memberRepository.findByEmail(request.getEmail()).ifPresent(member -> {
             throw new MemberException(ErrCode.ACCOUNT_ALREADY_REGISTERED);
         });
 
         Member member = memberRepository.save(request.toEntity(passwordEncoder));
 
-        // 이메일 발송 로직
-        // 이메일 재발송 로직에 대한 처리도 필요함.
+        // TODO: 이메일 재발송 로직에 대한 처리도 필요함.
         return emailAuthorize(member.getEmail(), member.getEmailAuthKey());
     }
 
-    @Transactional
-    public void authCheck(String authKey) {
+    @Transactional(readOnly = true)
+    public String checkMemberEmail(String authKey) {
         // 키를 이용해 찾기
         Optional<Member> findMember = memberRepository.findByEmailAuthKey(authKey);
 
@@ -57,7 +50,7 @@ public class MemberService {
         // member의 값을 업데이트 해준다.
         findMember.get().markEmailAsVerified();
 
-        log.info("이메일 인증이 완료되었습니다.");
+        return "성공!";
     }
 
     private String emailAuthorize(String userEmail, String authKey) {

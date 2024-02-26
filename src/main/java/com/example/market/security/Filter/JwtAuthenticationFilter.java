@@ -1,12 +1,9 @@
 package com.example.market.security.Filter;
 
 import com.example.market.security.component.JwtTokenProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -38,8 +35,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 토큰이 없거나 유효성 검사에서 실패한 경우 다음 filter로 진행되게 함.
         chain.doFilter(request, response);
     }
-//
-//    // authorization을 이용한 토큰 추출
+
+    // authorization을 이용한 토큰 추출
 //    private String resolveToken(HttpServletRequest request) {
 //        String bearerToken = request.getHeader("Authorization");
 //        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
@@ -63,5 +60,4 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         }
         return null;
     }
-
 }

@@ -11,10 +11,6 @@ public class ResponseBuilder {
         return ResponseEntity.ok().body(data);
     }
 
-    public static <T> ResponseEntity<T> buildOkResponse() {
-        return ResponseEntity.ok().body(null);
-    }
-
     public static ResponseEntity<ErrorResponse> buildErrResponse(CustomException e) {
         log.error(e.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode());

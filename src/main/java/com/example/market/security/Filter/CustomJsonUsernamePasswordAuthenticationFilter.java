@@ -1,6 +1,6 @@
 package com.example.market.security.Filter;
 
-import com.example.market.dto.member.MemberLogin;
+import com.example.market.dto.member.MemberLoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -9,14 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @Slf4j
 public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
@@ -44,8 +42,8 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
         }
 
         // servlet request로 받아온 username, password를 내가 만든 dto에 매핑하는 코드
-        MemberLogin.Request loginDto = objectMapper.readValue(
-                StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8), MemberLogin.Request.class);
+        MemberLoginDto.Request loginDto = objectMapper.readValue(
+                StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8), MemberLoginDto.Request.class);
 
         UsernamePasswordAuthenticationToken authRequest = getUsernamePasswordAuthenticationToken(loginDto);
 
@@ -54,7 +52,7 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    private static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(MemberLogin.Request loginDto) {
+    private static UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(MemberLoginDto.Request loginDto) {
         String email = loginDto.getEmail();
         String password = loginDto.getPassword();
 
