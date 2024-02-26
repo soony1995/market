@@ -38,17 +38,17 @@ public class CartService {
     @Transactional
     public String addCartItems(List<CartAddItemsDto.Request> request) {
         Cart cart = findMemberByRepository().getCart();
-
         List<CartItem> cartItems = handleAddItemsToCart(request, cart);
 
         cartItemRepository.saveAll(cartItems);
-
         return "성공!";
     }
 
     @Transactional(readOnly = true)
     public List<CartQueryItemsDto.Response> findCartItems() {
-        List<CartItem> cartItems = cartItemRepository.findByCartId(findMemberByRepository().getCart().getId()).orElseThrow(() -> new CartItemException(ErrCode.CART_NOT_FOUND));
+        List<CartItem> cartItems = cartItemRepository.findByCartId(
+                findMemberByRepository().getCart().getId()).orElseThrow(()
+                -> new CartItemException(ErrCode.CART_NOT_FOUND));
 
         return cartItems.stream()
                 .map(CartQueryItemsDto.Response::fromEntity)
@@ -69,21 +69,22 @@ public class CartService {
     public String removeCartItems(CartDeleteItemsDto.Request request) {
         Cart cart = findMemberByRepository().getCart();
 
-        // ID 목록에 해당하는 Person 엔티티들을 조회
-        List<CartItem> findCartItems = cartItemRepository.findAllByCartIdAndIds(cart.getId(), request.getItemId())
+        List<CartItem> findCartItems = cartItemRepository.findAllByCartIdAndItemIds(cart.getId(), request.getItemId())
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new CartItemException(ErrCode.ITEM_NOT_DELETED));
 
-        // 조회된 엔티티들을 삭제
         cartItemRepository.deleteAll(findCartItems);
 
         return "성공!";
     }
 
+    // TODO: MemberService에 넣는게 좋을 것 같습니당.
     private Member findMemberByRepository() {
-        return memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_FOUND));
+        return memberRepository.findByEmail(getCurrentUsername())
+                .orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_EXIST));
     }
 
+    // TODO : handle add 둘중 선택 아니면 다른거로 (동사가 2개임)
     private List<CartItem> handleAddItemsToCart(List<CartAddItemsDto.Request> requests, Cart cart) {
         return requests.stream()
                 .map(request -> {
@@ -91,10 +92,20 @@ public class CartService {
                             .orElseThrow(() -> new ItemException(ErrCode.ITEM_NOT_FOUND));
 
                     // 재고 확인
-                    checkStockIsValid(request, item);
+                    if (item.getStock() < request.getCount()) {
+                        throw new ItemException(ErrCode.STOCK_NOT_ENOUGH);
+                    }
 
                     // 카트 존재 확인
-                    Optional<CartItem> existingCartItem = cartItemRepository.findByItemIdAndCartId(item.getId(), cart.getId());
+                    Optional<CartItem> existingCartItem =
+                            cartItemRepository.findByItemIdAndCartId(item.getId(), cart.getId())
+                                    .map(cartItem -> {
+                                        CartItem cartItem = existingCartItem.get();
+                                        cartItem.increaseCount(request.getCount(), item.getPrice() * request.getCount());
+                                        return cartItem;
+                                    })
+                                    .orElseGet()
+
                     if (existingCartItem.isPresent()) {
                         CartItem cartItem = existingCartItem.get();
                         cartItem.increaseCount(request.getCount(), item.getPrice() * request.getCount());

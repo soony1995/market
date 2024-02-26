@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+        log.info("error log : {}" ,e.getMessage());
         return ResponseBuilder.buildErrResponse(e);
     }
 

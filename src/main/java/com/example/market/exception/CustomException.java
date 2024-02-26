@@ -5,10 +5,10 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public abstract class CustomException extends RuntimeException {
+public class CustomException extends RuntimeException {
     private final ErrCode errorCode;
 
-    protected CustomException(ErrCode errorCode) {
+    public CustomException(ErrCode errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -22,7 +22,7 @@ public abstract class CustomException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public CustomException(Throwable cause, ErrCode errorCode) {
+    public CustomException(ErrCode errorCode, Throwable cause) {
         super(cause);
         this.errorCode = errorCode;
     }

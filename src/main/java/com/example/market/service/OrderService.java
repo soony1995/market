@@ -5,10 +5,7 @@ import com.example.market.dto.order.OrderCreateDto;
 import com.example.market.dto.order.OrderDto;
 import com.example.market.dto.order.OrderInfoDto;
 import com.example.market.dto.order.OrderModifyStatus;
-import com.example.market.exception.CartException;
-import com.example.market.exception.CartItemException;
-import com.example.market.exception.MemberException;
-import com.example.market.exception.OrderItemException;
+import com.example.market.exception.*;
 import com.example.market.repository.*;
 import com.example.market.type.ErrCode;
 import com.example.market.type.OrderStatus;
@@ -31,8 +28,7 @@ public class OrderService {
 
     @Transactional
     public String addOrder(OrderCreateDto.Request request) {
-        // 사용자 인증
-        Member findMember = memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_FOUND));
+        Member findMember = memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_EXIST));
 
         if (findMember.getCart().getId() != request.getCartId()) {
             throw new CartException(ErrCode.CART_NOT_FOUND);
@@ -49,7 +45,7 @@ public class OrderService {
         // 성공 후 CartItem 삭제
         cartItemRepository.deleteAll(findCartItems);
 
-        return "성공!";
+        return "성공!"; // TODO: 어떻게 리턴할지 고민해서 변경
     }
 
     private Order createOrder(Member member) {
@@ -60,7 +56,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    private static List<OrderItem> convertCartItemToOrderItems(OrderCreateDto.Request request, List<CartItem> findCartItems, Order newOrder) {
+    private List<OrderItem> convertCartItemToOrderItems(OrderCreateDto.Request request, List<CartItem> findCartItems, Order newOrder) {
         return findCartItems.stream()
                 .map(cartItem -> OrderItem.builder()
                         .order(newOrder)
@@ -75,7 +71,13 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderDto.Response> findAllOrders() {
         Member currentMember = memberRepository.findByEmail(getCurrentUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CustomException(ErrCode.ACCOUNT_NOT_EXIST)); // TODO : 익셉션 만든거로 사용하기 (통일성있게)
+
+        try {
+            memberRepository.findByEmail(getCurrentUsername());
+        } catch (Exception e) {
+            throw new CustomException(ErrCode.ACCOUNT_NOT_EXIST, e);
+        }
 
         List<Order> orders = orderRepository.findByMemberId(currentMember.getId()).orElseThrow(() -> new RuntimeException("order not found"));
 

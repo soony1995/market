@@ -25,8 +25,6 @@ public class MemberService {
 
     @Transactional
     public String addMember(MemberRegisterDto.Request request) {
-
-        // 이미 가입된 회원인지 체크
         memberRepository.findByEmail(request.getEmail()).ifPresent(member -> {
             throw new MemberException(ErrCode.ACCOUNT_ALREADY_REGISTERED);
         });
@@ -39,22 +37,18 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public String checkMemberEmail(String authKey) {
-        // 키를 이용해 찾기
         Optional<Member> findMember = memberRepository.findByEmailAuthKey(authKey);
 
-        // 만약 존재하지 않을 경우 에러 발생
         if (findMember.isEmpty()) {
             throw new MemberException(ErrCode.INVALID_AUTH_KEY);
         }
 
-        // member의 값을 업데이트 해준다.
         findMember.get().markEmailAsVerified();
 
         return "성공!";
     }
 
     private String emailAuthorize(String userEmail, String authKey) {
-
         String subject = MailFormat.SIGNUP_CONFIRMATION.getSubject();
         String text = MailFormat.SIGNUP_CONFIRMATION.getTextTemplate(authKey);
 

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.example.market.type.Constant.SEP;
+import static com.example.market.type.Constant.COMMA_SEPARATOR;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class CustomUserDetails implements UserDetails {
         this.username = member.getEmail();
         this.password = member.getPassword();
         this.authorities =
-                Arrays.stream(member.getRoles().split(SEP))
+                Arrays.stream(member.getRoles().split(COMMA_SEPARATOR))
                         .map(role -> new SimpleGrantedAuthority(username))
                         .collect(Collectors.toList());
     }
