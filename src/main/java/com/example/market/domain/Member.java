@@ -1,5 +1,7 @@
 package com.example.market.domain;
 
+import com.example.market.dto.member.MemberCheckEmailDto;
+import com.example.market.dto.member.MemberRegisterDto;
 import com.example.market.type.MemberStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,7 +20,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Member extends BaseTimeEntity{
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -48,8 +50,19 @@ public class Member extends BaseTimeEntity{
 
     private boolean emailAuth;
     private String emailAuthKey;
-
     private LocalDateTime emailAuthAt;
+
+    public MemberCheckEmailDto.Response convertToMemberCheckEmailDto() {
+        return MemberCheckEmailDto.Response.builder()
+                .result("성공!")
+                .build();
+    }
+
+    public MemberRegisterDto.Response convertToMemberRegisterDto() {
+        return MemberRegisterDto.Response.builder()
+                .emailAuthKey(this.emailAuthKey)
+                .build();
+    }
 
     public void markEmailAsVerified() {
         this.emailAuth = true;

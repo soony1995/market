@@ -26,4 +26,15 @@ public class ItemRegisterDto {
                     .build();
         }
     }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Response {
+        private int price;
+        private String name;
+        private int stock;
+        private String description;
+    }
 }
+

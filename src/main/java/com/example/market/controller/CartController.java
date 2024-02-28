@@ -1,7 +1,7 @@
 package com.example.market.controller;
 
 import com.example.market.dto.cart.CartAddItemsDto;
-import com.example.market.dto.cart.CartDeleteItemsDto;
+import com.example.market.dto.cart.CartRemoveItemsDto;
 import com.example.market.dto.cart.CartPatchItemsDto;
 import com.example.market.dto.cart.CartQueryItemsDto;
 import com.example.market.service.CartService;
@@ -25,7 +25,7 @@ public class CartController {
     }
 
     @PostMapping("/carts")
-    public ResponseEntity<String> cartAddItems(@RequestBody List<CartAddItemsDto.Request> request, @PathVariable String version) {
+    public ResponseEntity<List<CartAddItemsDto.Response>> cartAddItems(@RequestBody List<CartAddItemsDto.Request> request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(cartService.addCartItems(request));
     }
 
@@ -35,7 +35,7 @@ public class CartController {
     }
 
     @PostMapping("/carts/items/delete")
-    public ResponseEntity<String> cartRemove(@RequestBody CartDeleteItemsDto.Request request, @PathVariable String version) {
+    public ResponseEntity<List<CartRemoveItemsDto.Response>> cartRemove(@RequestBody CartRemoveItemsDto.Request request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(cartService.removeCartItems(request));
     }
 }

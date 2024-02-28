@@ -14,7 +14,7 @@ public class CartAddItemsDto {
         private long itemId;
         private int count;
 
-        public CartItem toEntity(Cart cart, Item item) {
+        public CartItem convertToCartItem(Cart cart, Item item) {
             return CartItem.builder()
                     .count(this.count)
                     .item(item)
@@ -22,5 +22,13 @@ public class CartAddItemsDto {
                     .price(item.getPrice() * this.count)
                     .build();
         }
+    }
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Response {
+        private String itemName;
+        private int price;
+        private int count;
     }
 }

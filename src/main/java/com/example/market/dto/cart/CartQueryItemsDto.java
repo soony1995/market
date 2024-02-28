@@ -17,14 +17,5 @@ public class CartQueryItemsDto {
         private String name;
         private int count;
         private int price;
-
-        public static CartQueryItemsDto.Response fromEntity(CartItem cartItem) {
-            return Response.builder()
-                    .cartId(cartItem.getCart().getId())
-                    .name(cartItem.getItem().getName())
-                    .price(cartItem.getPrice())
-                    .count(cartItem.getCount())
-                    .build();
-        }
     }
 }

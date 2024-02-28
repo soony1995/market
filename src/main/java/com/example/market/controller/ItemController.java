@@ -1,6 +1,6 @@
 package com.example.market.controller;
 
-import com.example.market.dto.item.ItemInfoDto;
+import com.example.market.dto.item.ItemDetailsDto;
 import com.example.market.dto.item.ItemRegisterDto;
 import com.example.market.service.ItemService;
 import com.example.market.utils.ResponseBuilder;
@@ -17,19 +17,17 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/items/{id}")
-    public ResponseEntity<Object> itemDetails(@PathVariable long id, @PathVariable String version) {
-        ItemInfoDto.Response response = itemService.findItem(id);
-        return ResponseBuilder.buildOkResponse(response);
+    public ResponseEntity<ItemDetailsDto.Response> itemDetails(@PathVariable long id, @PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(itemService.findItem(id));
     }
 
     @GetMapping("/items")
-    public ResponseEntity<Object> itemList(@PathVariable String version) {
-        List<ItemInfoDto.Response> response = itemService.findAllItems();
-        return ResponseBuilder.buildOkResponse(response);
+    public ResponseEntity<List<ItemDetailsDto.Response>> itemList(@PathVariable String version) {
+        return ResponseBuilder.buildOkResponse(itemService.findAllItems());
     }
 
     @PostMapping("/items")
-    public ResponseEntity<String> itemAdd(@RequestBody ItemRegisterDto.Request request, @PathVariable String version) {
+    public ResponseEntity<ItemRegisterDto.Response> itemAdd(@RequestBody ItemRegisterDto.Request request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(itemService.addItem(request));
     }
 }

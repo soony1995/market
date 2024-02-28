@@ -1,5 +1,7 @@
 package com.example.market.domain;
 
+import com.example.market.dto.order.OrderCreateDto;
+import com.example.market.dto.order.OrderItemsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +33,25 @@ public class OrderItem extends BaseTimeEntity {
     private int count;
 
     private String location;
+
+    public OrderCreateDto.Response convertToOrderCreateDto() {
+        return OrderCreateDto.Response.builder()
+                .itemName(this.item.getName())
+                .orderPrice(this.orderPrice)
+                .count(this.count)
+                .location(this.location)
+                .build();
+    }
+
+    public OrderItemsDto.Response convertToOrderItemsDto() {
+        return OrderItemsDto.Response.builder()
+                .userEmail(order.getMember().getEmail())
+                .orderId(order.getId())
+                .itemId(this.getItem().getId())
+                .itemName(this.getItem().getName())
+                .orderPrice(this.orderPrice)
+                .count(this.count)
+                .location(this.location)
+                .build();
+    }
 }

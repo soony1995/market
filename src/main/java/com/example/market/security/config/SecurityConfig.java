@@ -49,9 +49,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // configureAuthentication 메서드는 스프링 부트 2.6.X 부터 순환참조 오류 발생해서
-    // 다른 config 클래스로 옮기든지 application.yml 설정 변경해줘야함
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();

@@ -1,18 +1,17 @@
 package com.example.market.domain;
 
+import com.example.market.dto.item.ItemDetailsDto;
+import com.example.market.dto.item.ItemRegisterDto;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Item extends BaseTimeEntity{
+public class Item extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
@@ -22,4 +21,22 @@ public class Item extends BaseTimeEntity{
     private int price;
     private int stock;
     private String description;
+
+    public ItemDetailsDto.Response convertToItemDetailsDto() {
+        return ItemDetailsDto.Response.builder()
+                .price(this.price)
+                .itemName(this.name)
+                .stock(this.stock)
+                .description(this.description)
+                .build();
+    }
+
+    public ItemRegisterDto.Response convertToItemRegisterDto() {
+        return ItemRegisterDto.Response.builder()
+                .name(this.name)
+                .price(this.price)
+                .stock(this.stock)
+                .description(this.description)
+                .build();
+    }
 }

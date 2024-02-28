@@ -16,7 +16,9 @@ public class MemberRegisterDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @RequiredArgsConstructor
     public static class Request {
+        private PasswordEncoder passwordEncoder;
         @NonNull
         private String email;
 
@@ -26,7 +28,7 @@ public class MemberRegisterDto {
         @Nullable
         private String location;
 
-        public Member toEntity(PasswordEncoder passwordEncoder) {
+        public Member convertToMember() {
             Cart cart = new Cart();
             return Member.builder()
                     .email(this.getEmail())
@@ -39,5 +41,12 @@ public class MemberRegisterDto {
                     .cart(cart)
                     .build();
         }
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Response {
+        private String emailAuthKey;
     }
 }

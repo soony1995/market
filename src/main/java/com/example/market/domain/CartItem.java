@@ -1,5 +1,8 @@
 package com.example.market.domain;
 
+import com.example.market.dto.cart.CartAddItemsDto;
+import com.example.market.dto.cart.CartQueryItemsDto;
+import com.example.market.dto.cart.CartRemoveItemsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,13 +12,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItem extends BaseTimeEntity{
+public class CartItem extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +39,32 @@ public class CartItem extends BaseTimeEntity{
     private int price;
     private int count;
 
-    public void increaseCount(int count,int price) {
+    public CartAddItemsDto.Response convertToCartAddItemsDto() {
+        return CartAddItemsDto.Response.builder()
+                .itemName(this.item.getName())
+                .price(this.price)
+                .count(this.count)
+                .build();
+    }
+
+    public CartQueryItemsDto.Response convertToCartQueryItemDto() {
+        return CartQueryItemsDto.Response.builder()
+                .cartId(this.cart.getId())
+                .name(this.item.getName())
+                .price(this.price)
+                .count(this.count)
+                .build();
+    }
+
+    public CartRemoveItemsDto.Response convertToCartRemoveItemsDto() {
+        return CartRemoveItemsDto.Response.builder()
+                .itemName(this.item.getName())
+                .price(this.price)
+                .count(this.count)
+                .build();
+    }
+
+    public void increaseCount(int count, int price) {
         this.count += count;
         this.price += price;
     }

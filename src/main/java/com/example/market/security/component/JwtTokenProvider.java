@@ -2,11 +2,11 @@ package com.example.market.security.component;
 
 import com.example.market.exception.CustomException;
 import com.example.market.security.dto.TokenDto;
-import com.example.market.type.ErrCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,7 +44,7 @@ public class JwtTokenProvider {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(SEP));
+                .collect(Collectors.joining(COMMA_SEPARATOR));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -81,13 +81,13 @@ public class JwtTokenProvider {
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTH).toString().split(SEP))
+                Arrays.stream(claims.get(AUTH).toString().split(COMMA_SEPARATOR))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), EMPTY_STRING, authorities);
-        return new UsernamePasswordAuthenticationToken(principal, EMPTY_STRING, authorities);
+        UserDetails principal = new User(claims.getSubject(), StringUtils.EMPTY, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, StringUtils.EMPTY, authorities);
     }
 
     public void addCookieToResponse(HttpServletResponse response, String name, String value, int maxAgeInSeconds) {

@@ -1,16 +1,14 @@
 package com.example.market.domain;
 
+import com.example.market.dto.order.OrderModifyStatusDto;
+import com.example.market.dto.order.OrdersDto;
 import com.example.market.type.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +32,20 @@ public class Order extends BaseTimeEntity {
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
+
+    public OrdersDto.Response convertToOrderDetailsDto() {
+        return OrdersDto.Response.builder()
+                .orderId(this.id)
+                .orderedAt(this.getCreatedDate()) // baseEntity에서 getter를 세팅해주면 된다.
+                .orderStatus(this.status)
+                .build();
+    }
+
+    public OrderModifyStatusDto.Response convertToOrderModifyStatusDto() {
+        return OrderModifyStatusDto.Response.builder()
+                .result("성공!")
+                .build();
+    }
 
     public void modifyOrderStatus(OrderStatus orderStatus) {
         this.status = orderStatus;

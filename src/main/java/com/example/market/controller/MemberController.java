@@ -1,5 +1,6 @@
 package com.example.market.controller;
 
+import com.example.market.dto.member.MemberCheckEmailDto;
 import com.example.market.dto.member.MemberRegisterDto;
 import com.example.market.service.MemberService;
 import com.example.market.utils.ResponseBuilder;
@@ -17,12 +18,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/members")
-    public ResponseEntity<String> memberAdd(@RequestBody MemberRegisterDto.Request request, @PathVariable String version) {
+    public ResponseEntity<MemberRegisterDto.Response> memberAdd(@RequestBody MemberRegisterDto.Request request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(memberService.addMember(request));
     }
 
     @GetMapping("/members/auth-check/{key}")
-    public ResponseEntity<String> MemberEmailCheck(@PathVariable String key, @PathVariable String version) {
+    public ResponseEntity<MemberCheckEmailDto.Response> MemberEmailCheck(@PathVariable String key, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(memberService.checkMemberEmail(key));
     }
 }

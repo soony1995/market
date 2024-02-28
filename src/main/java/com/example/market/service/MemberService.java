@@ -2,6 +2,7 @@ package com.example.market.service;
 
 import com.example.market.component.MailComponent;
 import com.example.market.domain.Member;
+import com.example.market.dto.member.MemberCheckEmailDto;
 import com.example.market.dto.member.MemberRegisterDto;
 import com.example.market.exception.CustomException;
 import com.example.market.repository.MemberRepository;
@@ -9,11 +10,8 @@ import com.example.market.type.ErrCode;
 import com.example.market.type.MailFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,85 +19,30 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MailComponent mailComponent;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String addMember(MemberRegisterDto.Request request) {
+    public MemberRegisterDto.Response addMember(MemberRegisterDto.Request request) {
         memberRepository.findByEmail(request.getEmail()).ifPresent(member -> {
             throw new CustomException(ErrCode.MEMBER_ALREADY_REGISTERED);
         });
-        Member member = memberRepository.save(request.toEntity(passwordEncoder));
+        Member member = memberRepository.save(request.convertToMember());
+        emailAuthorize(member.getEmail(), member.getEmailAuthKey());
 
-        return emailAuthorize(member.getEmail(), member.getEmailAuthKey());
+        return member.convertToMemberRegisterDto();
     }
 
     @Transactional(readOnly = true)
-    public String checkMemberEmail(String authKey) {
-        Optional<Member> findMember = memberRepository.findByEmailAuthKey(authKey);
-        if (findMember.isEmpty()) {
-            throw new CustomException(ErrCode.MEMBER_INVALID_AUTH_KEY);
-        }
-        findMember.get().markEmailAsVerified();
+    public MemberCheckEmailDto.Response checkMemberEmail(String authKey) {
+        Member member = memberRepository.findByEmailAuthKey(authKey)
+                .orElseThrow(() -> new CustomException(ErrCode.MEMBER_INVALID_AUTH_KEY));
+        member.markEmailAsVerified();
 
-        return "성공!";
+        return member.convertToMemberCheckEmailDto();
     }
 
-    private String emailAuthorize(String userEmail, String authKey) {
-
+    private void emailAuthorize(String userEmail, String authKey) {
         String subject = MailFormat.SIGNUP_CONFIRMATION.getSubject();
         String text = MailFormat.SIGNUP_CONFIRMATION.getTextTemplate(authKey);
-
         mailComponent.sendMail(userEmail, subject, text);
-        return authKey;
     }
-
-
-//
-//    @Transactional
-//    @Override
-//    public boolean validateEmailConfirmation(String emailAuthKey) {
-//        Optional<Member> findMember = memberRepository.findByEmailAuthKey(emailAuthKey);
-//
-//        // TODO: isEmpty는 null 체크를 하지 않기 때문에 null 체크를 먼저 하도록 하자.
-//        if (findMember.isEmpty()) {
-//            return false;
-//        }
-//
-//        Member member = findMember.get();
-//        /* TODO: jpa dirty checking을 이용해 받아온 객체의 값을 변경하는 것만으로도
-//               저장소에도 변경이 가능하게 해준다.
-//         */
-//        member.authenticateEmail();
-//
-//        return true;
-//    }
-//
-//    @Transactional
-//    @Override
-//    public boolean sendPasswordResetLink(ResetPasswordDto request) {
-//        Optional<Member> optionalMember = memberRepository.findByEmail(request.getUserEmail());
-//        if (optionalMember.isEmpty()) {
-//            throw new UsernameNotFoundException("이메일이 존재 하지 않습니다.");
-//        }
-//        // ttl을 설정한 uuid를 redis에 저장
-//        String key = UUID.randomUUID().toString();
-//        // Set에 사용자 이메일 추가
-//        redisTemplate.opsForSet().add(key, request.getUserEmail());
-//
-//        // 해당 키에 대해 TTL 설정
-//        redisTemplate.expire(key, Duration.ofHours(1));
-//
-//        // mailSender에 uuid를 포함해 send
-//        emailAuthorize(request.getUserEmail(), key, MailFormat.PASSWORD_RESET);
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean validatePasswordResetLink(String id) {
-//        //
-//        return false;
-//    }
-//
-
 }

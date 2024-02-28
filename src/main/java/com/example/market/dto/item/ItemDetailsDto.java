@@ -5,8 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
-public class ItemInfoDto {
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ItemDetailsDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
@@ -24,14 +28,5 @@ public class ItemInfoDto {
         private String itemName;
         private int stock;
         private String description;
-
-        public static ItemInfoDto.Response fromEntity(Item item) {
-            return Response.builder()
-                    .price(item.getPrice())
-                    .itemName(item.getName())
-                    .stock(item.getStock())
-                    .description(item.getDescription())
-                    .build();
-        }
     }
 }
