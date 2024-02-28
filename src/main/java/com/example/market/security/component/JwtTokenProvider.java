@@ -1,6 +1,8 @@
 package com.example.market.security.component;
 
+import com.example.market.exception.CustomException;
 import com.example.market.security.dto.TokenDto;
+import com.example.market.type.ErrCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 import static com.example.market.type.Constant.*;
+import static com.example.market.type.ErrCode.*;
 
 @Slf4j
 @Component
@@ -73,7 +76,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTH) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new CustomException(MEMBER_NOT_AUTHORIZATION);
         }
 
         // 클레임에서 권한 정보 가져오기

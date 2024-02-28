@@ -18,6 +18,4 @@ public class SecurityUtils {
         UserDetails userDetails = getCurrentUserDetails();
         return userDetails != null ? userDetails.getUsername() : null;
     }
-
-    // 필요한 경우, 다른 사용자 정보도 이와 비슷한 방식으로 가져올 수 있습니다.
 }

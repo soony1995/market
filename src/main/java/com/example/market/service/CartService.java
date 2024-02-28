@@ -8,9 +8,7 @@ import com.example.market.dto.cart.CartAddItemsDto;
 import com.example.market.dto.cart.CartDeleteItemsDto;
 import com.example.market.dto.cart.CartPatchItemsDto;
 import com.example.market.dto.cart.CartQueryItemsDto;
-import com.example.market.exception.CartItemException;
-import com.example.market.exception.ItemException;
-import com.example.market.exception.MemberException;
+import com.example.market.exception.CustomException;
 import com.example.market.repository.CartItemRepository;
 import com.example.market.repository.ItemRepository;
 import com.example.market.repository.MemberRepository;
@@ -38,9 +36,7 @@ public class CartService {
     @Transactional
     public String addCartItems(List<CartAddItemsDto.Request> request) {
         Cart cart = findMemberByRepository().getCart();
-
         List<CartItem> cartItems = handleAddItemsToCart(request, cart);
-
         cartItemRepository.saveAll(cartItems);
 
         return "성공!";
@@ -48,7 +44,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public List<CartQueryItemsDto.Response> findCartItems() {
-        List<CartItem> cartItems = cartItemRepository.findByCartId(findMemberByRepository().getCart().getId()).orElseThrow(() -> new CartItemException(ErrCode.CART_NOT_FOUND));
+        List<CartItem> cartItems = cartItemRepository.findByCartId(findMemberByRepository().getCart().getId()).orElseThrow(() -> new CustomException(ErrCode.CART_NOT_EXIST));
 
         return cartItems.stream()
                 .map(CartQueryItemsDto.Response::fromEntity)
@@ -68,27 +64,23 @@ public class CartService {
     @Transactional
     public String removeCartItems(CartDeleteItemsDto.Request request) {
         Cart cart = findMemberByRepository().getCart();
-
-        // ID 목록에 해당하는 Person 엔티티들을 조회
-        List<CartItem> findCartItems = cartItemRepository.findAllByCartIdAndIds(cart.getId(), request.getItemId())
+        List<CartItem> findCartItems = cartItemRepository.findAllByCartIdAndItemIds(cart.getId(), request.getItemId())
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new CartItemException(ErrCode.ITEM_NOT_DELETED));
-
-        // 조회된 엔티티들을 삭제
+                .orElseThrow(() -> new CustomException(ErrCode.ITEM_NOT_DELETED));
         cartItemRepository.deleteAll(findCartItems);
 
         return "성공!";
     }
 
     private Member findMemberByRepository() {
-        return memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_FOUND));
+        return memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new CustomException(ErrCode.MEMBER_NOT_EXIST));
     }
 
     private List<CartItem> handleAddItemsToCart(List<CartAddItemsDto.Request> requests, Cart cart) {
         return requests.stream()
                 .map(request -> {
                     Item item = itemRepository.findById(request.getItemId())
-                            .orElseThrow(() -> new ItemException(ErrCode.ITEM_NOT_FOUND));
+                            .orElseThrow(() -> new CustomException(ErrCode.ITEM_NOT_EXIST));
 
                     // 재고 확인
                     checkStockIsValid(request, item);
@@ -108,7 +100,7 @@ public class CartService {
 
     private static void checkStockIsValid(CartAddItemsDto.Request request, Item item) {
         if (item.getStock() < request.getCount()) {
-            throw new ItemException(ErrCode.STOCK_NOT_ENOUGH);
+            throw new CustomException(ErrCode.ITEM_STOCK_NOT_ENOUGH);
         }
     }
 }

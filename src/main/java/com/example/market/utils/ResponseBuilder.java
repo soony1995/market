@@ -12,7 +12,7 @@ public class ResponseBuilder {
     }
 
     public static ResponseEntity<ErrorResponse> buildErrResponse(CustomException e) {
-        log.error(e.getMessage());
+        log.info("error log : {}", e.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(e.getErrorCode());
         return ResponseEntity.status(e.getErrorCode().getHttpStatus()).body(errorResponse);
     }

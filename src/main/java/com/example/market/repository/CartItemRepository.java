@@ -13,7 +13,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     // TODO: QueryDsl로 변경하는 작업
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.id = :cartId AND ci.item.id IN :ids")
-    Optional<List<CartItem>> findAllByCartIdAndIds(@Param("cartId") Long cartId, @Param("ids") List<Long> ids);
+    Optional<List<CartItem>> findAllByCartIdAndItemIds(@Param("cartId") Long cartId, @Param("ids") List<Long> ids);
 
     Optional<List<CartItem>> findByCartId(Long cartId);
 }

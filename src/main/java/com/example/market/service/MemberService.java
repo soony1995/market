@@ -3,7 +3,7 @@ package com.example.market.service;
 import com.example.market.component.MailComponent;
 import com.example.market.domain.Member;
 import com.example.market.dto.member.MemberRegisterDto;
-import com.example.market.exception.MemberException;
+import com.example.market.exception.CustomException;
 import com.example.market.repository.MemberRepository;
 import com.example.market.type.ErrCode;
 import com.example.market.type.MailFormat;
@@ -25,29 +25,20 @@ public class MemberService {
 
     @Transactional
     public String addMember(MemberRegisterDto.Request request) {
-
-        // 이미 가입된 회원인지 체크
         memberRepository.findByEmail(request.getEmail()).ifPresent(member -> {
-            throw new MemberException(ErrCode.ACCOUNT_ALREADY_REGISTERED);
+            throw new CustomException(ErrCode.MEMBER_ALREADY_REGISTERED);
         });
-
         Member member = memberRepository.save(request.toEntity(passwordEncoder));
 
-        // TODO: 이메일 재발송 로직에 대한 처리도 필요함.
         return emailAuthorize(member.getEmail(), member.getEmailAuthKey());
     }
 
     @Transactional(readOnly = true)
     public String checkMemberEmail(String authKey) {
-        // 키를 이용해 찾기
         Optional<Member> findMember = memberRepository.findByEmailAuthKey(authKey);
-
-        // 만약 존재하지 않을 경우 에러 발생
         if (findMember.isEmpty()) {
-            throw new MemberException(ErrCode.INVALID_AUTH_KEY);
+            throw new CustomException(ErrCode.MEMBER_INVALID_AUTH_KEY);
         }
-
-        // member의 값을 업데이트 해준다.
         findMember.get().markEmailAsVerified();
 
         return "성공!";

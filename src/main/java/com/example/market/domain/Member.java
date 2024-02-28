@@ -51,8 +51,6 @@ public class Member extends BaseTimeEntity{
 
     private LocalDateTime emailAuthAt;
 
-
-    // 이메일 인증을 처리하는 메서드
     public void markEmailAsVerified() {
         this.emailAuth = true;
         this.emailAuthAt = LocalDateTime.now();

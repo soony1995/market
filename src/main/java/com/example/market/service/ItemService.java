@@ -3,7 +3,7 @@ package com.example.market.service;
 import com.example.market.domain.Item;
 import com.example.market.dto.item.ItemInfoDto;
 import com.example.market.dto.item.ItemRegisterDto;
-import com.example.market.exception.ItemException;
+import com.example.market.exception.CustomException;
 import com.example.market.repository.ItemRepository;
 import com.example.market.type.ErrCode;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ItemService {
         // 오픈 마켓의 형태가 아니기 때문에, 동일한 상품의 이름은 허용하지 않음.
         itemRepository.findByName(request.getName())
                 .ifPresent(item -> {
-                    throw new ItemException(ErrCode.ITEM_ALREADY_EXIST);
+                    throw new CustomException(ErrCode.ITEM_ALREADY_EXIST);
                 });
 
         itemRepository.save(request.toEntity());
@@ -34,7 +34,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public ItemInfoDto.Response findItem(long id) {
         // 아이템 존재 여부 확인
-        Item findItem = itemRepository.findById(id).orElseThrow(() -> new ItemException(ErrCode.ITEM_NOT_FOUND));
+        Item findItem = itemRepository.findById(id).orElseThrow(() -> new CustomException(ErrCode.ITEM_NOT_EXIST));
 
         return ItemInfoDto.Response.fromEntity(findItem);
     }

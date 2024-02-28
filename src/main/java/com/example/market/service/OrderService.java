@@ -5,12 +5,8 @@ import com.example.market.dto.order.OrderCreateDto;
 import com.example.market.dto.order.OrderDto;
 import com.example.market.dto.order.OrderInfoDto;
 import com.example.market.dto.order.OrderModifyStatus;
-import com.example.market.exception.CartException;
-import com.example.market.exception.CartItemException;
-import com.example.market.exception.MemberException;
-import com.example.market.exception.OrderItemException;
+import com.example.market.exception.CustomException;
 import com.example.market.repository.*;
-import com.example.market.type.ErrCode;
 import com.example.market.type.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.market.type.ErrCode.*;
 import static com.example.market.utils.SecurityUtils.getCurrentUsername;
 
 @Service
@@ -31,22 +28,13 @@ public class OrderService {
 
     @Transactional
     public String addOrder(OrderCreateDto.Request request) {
-        // 사용자 인증
-        Member findMember = memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new MemberException(ErrCode.ACCOUNT_NOT_FOUND));
-
+        Member findMember = memberRepository.findByEmail(getCurrentUsername()).orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
         if (findMember.getCart().getId() != request.getCartId()) {
-            throw new CartException(ErrCode.CART_NOT_FOUND);
+            throw new CustomException(CART_NOT_EXIST);
         }
-
-        List<CartItem> findCartItems = cartItemRepository.findByCartId(request.getCartId()).orElseThrow(() -> new CartItemException(ErrCode.ITEM_NOT_FOUND));
-
-        // Order 엔티티 생성 및 초기 설정
+        List<CartItem> findCartItems = cartItemRepository.findByCartId(request.getCartId()).orElseThrow(() -> new CustomException(ITEM_NOT_EXIST));
         Order newOrder = createOrder(findMember);
-
-        // findCartItems의 요소들을 OrderItem 엔티티로 변환 및 저장
         orderItemRepository.saveAll(convertCartItemToOrderItems(request, findCartItems, newOrder));
-
-        // 성공 후 CartItem 삭제
         cartItemRepository.deleteAll(findCartItems);
 
         return "성공!";
@@ -75,9 +63,8 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderDto.Response> findAllOrders() {
         Member currentMember = memberRepository.findByEmail(getCurrentUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Order> orders = orderRepository.findByMemberId(currentMember.getId()).orElseThrow(() -> new RuntimeException("order not found"));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
+        List<Order> orders = orderRepository.findByMemberId(currentMember.getId()).orElseThrow(() -> new CustomException(ORDER_NOT_EXIST));
 
         return orders.stream()
                 .map(OrderDto.Response::fromEntity)
@@ -86,13 +73,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderInfoDto.Response> findOrder(long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
-
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_EXIST));
         if (!order.getMember().getEmail().equals(getCurrentUsername())) {
-            throw new RuntimeException("Access deny");
+            throw new CustomException(MEMBER_NOT_AUTHORIZATION);
         }
-
-        List<OrderItem> findOrderItem = orderItemRepository.findByOrderId(order.getId()).orElseThrow(() -> new OrderItemException(ErrCode.ORDER_NOT_FOUND));
+        List<OrderItem> findOrderItem = orderItemRepository.findByOrderId(order.getId()).orElseThrow(() -> new CustomException(ORDER_NOT_EXIST));
 
         return findOrderItem.stream()
                 .map(orderItem -> OrderInfoDto.Response.fromEntity(order, orderItem))
@@ -101,12 +86,10 @@ public class OrderService {
 
     @Transactional
     public String modifyOrderStatus(long orderId, OrderModifyStatus.Request request) {
-        Order findOrder = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("order not found"));
-
+        Order findOrder = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_EXIST));
         if (!findOrder.getMember().getEmail().equals(getCurrentUsername())) {
-            throw new RuntimeException("Access deny");
+            throw new CustomException(MEMBER_NOT_AUTHORIZATION);
         }
-
         findOrder.modifyOrderStatus(request.getOrderStatus());
 
         return "성공!";
