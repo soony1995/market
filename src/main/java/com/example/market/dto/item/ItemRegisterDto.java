@@ -30,6 +30,7 @@ public class ItemRegisterDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    @Getter
     public static class Response {
         private int price;
         private String name;

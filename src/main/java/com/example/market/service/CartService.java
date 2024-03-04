@@ -9,12 +9,13 @@ import com.example.market.dto.cart.CartRemoveItemsDto;
 import com.example.market.dto.cart.CartPatchItemsDto;
 import com.example.market.dto.cart.CartQueryItemsDto;
 import com.example.market.exception.CustomException;
-import com.example.market.repository.CartItemRepository;
-import com.example.market.repository.ItemRepository;
-import com.example.market.repository.MemberRepository;
+import com.example.market.repository.*;
 import com.example.market.type.ErrCode;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
