@@ -30,7 +30,7 @@ public class CartController {
     }
 
     @PatchMapping("/carts")
-    public ResponseEntity<String> cartModify(@RequestBody List<CartPatchItemsDto.Request> request, @PathVariable String version) {
+    public ResponseEntity<String> cartModify(@RequestBody CartPatchItemsDto.Request request, @PathVariable String version) {
         return ResponseBuilder.buildOkResponse(cartService.modifyCartItems(request));
     }
 

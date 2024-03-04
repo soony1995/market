@@ -19,6 +19,7 @@ public enum ErrCode {
 
     //CART
     CART_NOT_EXIST(HttpStatus.NOT_FOUND, "장바구니가 존재하지 않습니다."),
+    CART_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"수량을 업데이트 할 수 없습니다."),
 
     //ITEM
     ITEM_NOT_EXIST(HttpStatus.NOT_FOUND, "찾는 아이템이 존재하지 않습니다."),

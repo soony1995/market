@@ -12,6 +12,7 @@ import com.example.market.exception.CustomException;
 import com.example.market.repository.CartItemRepository;
 import com.example.market.repository.ItemRepository;
 import com.example.market.repository.MemberRepository;
+import com.example.market.type.ErrCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,23 +57,20 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: QueryDsl을 이용해 수정해야함.
     @Transactional
-    public String modifyCartItems
-    (List<CartPatchItemsDto.Request> request) {
-        // find cart id
-//        Cart cart = findMemberByRepository().getCart();
-
-        // TODO: queryDsl을 이용해 짜도록 하자.
+    public String modifyCartItems(CartPatchItemsDto.Request request) {
+        Cart cart = findMemberByCurrentUsername().getCart();
+        long affectedRows = cartItemRepository.updateItemCount(cart.getId(), request.getItemId(), request.getCount());
+        if (affectedRows == 0) {
+            throw new CustomException(CART_UPDATE_FAILED);
+        }
         return "성공!";
     }
 
     @Transactional
     public List<CartRemoveItemsDto.Response> removeCartItems(CartRemoveItemsDto.Request request) {
         Cart cart = findMemberByCurrentUsername().getCart();
-        List<CartItem> cartItems = cartItemRepository.findAllByCartIdAndItemIds(cart.getId(), request.getItemId())
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new CustomException(ITEM_NOT_DELETED));
+        List<CartItem> cartItems = cartItemRepository.queryCartItems(cart.getId(), request.getItemId());
         cartItemRepository.deleteAll(cartItems);
 
         return cartItems.stream()
